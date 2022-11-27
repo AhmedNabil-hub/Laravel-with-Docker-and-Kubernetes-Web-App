@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  web:
+    depends_on:
+      - mysql_db
+    environment:
+      DB_CONNECTION: ${DB_CONNECTION}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      APP_PORT: ${APP_PORT}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-k8s:v1
+    ports:
+      - "8010:8000"
+  mysql_db:
+    image: mysql:latest
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "290999"
+      MYSQL_USER: "admin"
+      MYSQL_PASS: "admin_pass"
+      MYSQL_DATABASE: "laravel_k8s"
+    volumes:
+      - mysql_data:/var/lib/mysql
+volumes:
+  mysql_data:
